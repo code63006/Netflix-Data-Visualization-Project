@@ -1,0 +1,41 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+import os
+
+data_path = os.path.join("..\data", "netflix_titles.csv")
+if not os.path.exists(data_path):
+    print(f"Error: Dataset not found at {data_path}")
+    print("Please download the dataset from https://www.kaggle.com/datasets/shivamb/netflix-shows and place it in the 'data' directory.")
+else:
+    df = pd.read_csv(data_path)
+    print("Dataset loaded successfully!")
+
+df["date_added"] = df["date_added"].str.strip()
+df["date_added"] = pd.to_datetime(df["date_added"])
+df["year_added"] = df["date_added"].dt.year
+df["month_added"] = df["date_added"].dt.month
+
+plt.figure(figsize=(8, 6))
+sns.countplot(x='type', data=df, palette='pastel')
+plt.title('Distribution of Content Types')
+plt.xlabel('Type (Movie/TV Show)')
+plt.ylabel('Count')
+plt.show()
+
+plt.figure(figsize=(12, 6))
+df.groupby('year_added')['show_id'].count().plot(kind='line')
+plt.title('Content Added Over the Years')
+plt.xlabel('Year Added')
+plt.ylabel('Number of Titles Added')
+plt.show()
+
+plt.figure(figsize=(12, 6))
+top_countries = df["country"]
+sns.barplot(x=top_countries.index, y=top_countries.values, palette='viridis')
+plt.title('Top 10 Countries with Most Content')
+plt.xlabel('Country')
+plt.ylabel('Number of Titles')
+plt.xticks(rotation=45, ha='right')
+plt.tight_layout()
+plt.show()

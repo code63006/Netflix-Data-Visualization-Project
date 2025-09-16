@@ -1,6 +1,6 @@
 """
 Netflix Data Visualization Project
-Author: Your Name
+Author: Ruturaj 
 """
 
 import pandas as pd
